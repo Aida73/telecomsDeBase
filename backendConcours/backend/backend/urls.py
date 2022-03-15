@@ -24,5 +24,6 @@ urlpatterns = [
     path('api/session/date-limite-depot-concours', views.getDateLimiteDepots ,name="dateLimiteDepotsConcours"),
     path('api/session/date-ouverture-concours', views.getDateDepotConcours ,name="dateOuvertureDepotsConcours"),
     path('api/session/date-depot-releves', views.getDateDepotReleves ,name="dateReleves"),
+    path('api/filieres', views.getFilieres ,name="filieres"),
 
 ]

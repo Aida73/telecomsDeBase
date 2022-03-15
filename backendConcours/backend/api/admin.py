@@ -14,3 +14,6 @@ class CentreAdmin(admin.ModelAdmin):
 class SessionAdmin(admin.ModelAdmin):
     list_display = ('annee','dateConcours','date_ouverture_depot','date_limite_depot','date_depot_releves')
 
+@admin.register(Filiere)
+class FiliereAdmin(admin.ModelAdmin):
+    list_display = ('nom',)

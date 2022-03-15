@@ -6,18 +6,23 @@ import sox
 import shutil
 
 # Create your views here.
-def convertToGsm(filename):
+def convertToUlaw(filename):
     print(os.path.basename)
-    os.system(f"sox sounds/{filename}.mp3 -r 8000 -c 1 ./sounds/{filename}.gsm") #ici on va mettre le chemin vers sounds de astrisk
+    #lame --decode somemp3file.mp3 output.wav
+    #os.system(f"sox sounds/{filename}.mp3 -r 8000 -c 1 ./sounds/{filename}.ulaw") #ici on va mettre le chemin vers sounds de astrisk
+    os.system(f"lame --decode sounds/{filename}.mp3 sounds/{filename}.wav")
+    os.system(f"sox -V sounds/{filename}.wav -r 8000 -c 1 -t ul sounds/{filename}.ulaw")
+    os.remove(f"sounds/{filename}.wav")
+    os.remove(f"sounds/{filename}.mp3")
+
 
 
 
 def translate(text, language, filename):
     vocal = gTTS(text=text, lang=language, slow=False)
     vocal.save(f"./sounds/{filename}.mp3")
-    convertToGsm(filename)
+    convertToUlaw(filename)
     
-
 
 def convertDate(date):
     listeMois = ['janvier','février','mars','avril','mai','juin','août',
@@ -56,7 +61,7 @@ def getDateConcours(request):
     try:
         session = Session.objects.get(id=1)
         print("date ",convertDate(session.dateConcours))
-        text= f"Le concours de cette année se tiendra le {convertDate(session.dateConcours)}"
+        text= f"Le concours de cette année se tiendra le {convertDate(session.dateConcours)}.\nN'oubliez pas de Présenter une pièce d'identité en cours de validité le jour du concours, ou une carte d'identité scolaire valide."
     except:
         text = "Une date n'a pas encore été retenue. Veuillez nous recontacter plutard"
         print("date ",convertDate(session.dateConcours))
@@ -103,4 +108,25 @@ def getDateLimiteDepots(request):
 
     translate(text,'fr','dateLimiteDepotConcours')
     return HttpResponse(text)
+
+
+def getFilieres(request):
+    text="les différents candidats suivront une formation de cinquant : \n deuzan de tronc commun et troizan de spécialisation dans les filières suivantes:\n"
+    try:
+        filieres = Filiere.objects.all()
+        index=1
+       
+        for filiere in filieres:
+            print(index)
+            print(filiere)
+            text+=f"{str(index)} \n {filiere}\n"
+            index+=1 
+
+    except:
+        text = "erreur de saisie"
+
+
+    translate(text,'fr','filieres')
+    return HttpResponse(text)
+
 

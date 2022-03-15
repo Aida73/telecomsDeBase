@@ -56,3 +56,18 @@ class Session(models.Model):
 
 
 
+class Filiere(models.Model):
+
+    nom = models.CharField(max_length=50)
+
+    class Meta:
+        verbose_name = ("filiere")
+        verbose_name_plural = ("filieres")
+
+    def __str__(self):
+        return self.nom
+
+   
+
+
+
